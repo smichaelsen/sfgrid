@@ -1,0 +1,55 @@
+@import 'variables';
+
+@function sfgrid-strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+// Returns the calc() expression to grow the value linearly between two screen widths
+@function sfgrid-linear($vMin, $vMax, $valMin, $valMax) {
+  $m: ($valMax - $valMin) / ($vMax - $vMin);
+  $c: $valMin - ($vMin * $m);
+  $m2: $m * 100;
+  @return calc(#{$m2}vw + 1 * #{$c}px);
+}
+
+// Returns $default if the $key does not exist
+@function sfgrid-map-get-default($map, $key, $default) {
+  @if map-has-key($map, $key) {
+    @return map-get($map, $key);
+  } @else {
+    @return $default;
+  }
+}
+
+@function sfgrid-get-gutter($size, $available-gutters) {
+  $resulting-gutter: 0;
+  @each $viewport-size in map_keys($sfgrid-viewport-sizes) {
+    @if map_has_key($available-gutters, $viewport-size) {
+      $resulting-gutter: map_get($available-gutters, $viewport-size)
+    }
+    @if $viewport-size == $size {
+      @return $resulting-gutter;
+    }
+  }
+  @return $resulting-gutter;
+}
+
+@function sfgrid-lower($size-name) {
+  @if map_has_key($sfgrid-viewport-sizes, $size-name) {
+    @return nth(map_get($sfgrid-viewport-sizes, $size-name), 1);
+  } @else {
+    @error 'Trying to determine lower bound of invalid size #{$size-name}';
+  }
+}
+
+@function sfgrid-upper($size-name) {
+  @if map_has_key($sfgrid-viewport-sizes, $size-name) {
+    @return nth(map_get($sfgrid-viewport-sizes, $size-name), 2);
+  } @else {
+    @error 'Trying to determine upper bound of invalid size #{$size-name}';
+  }
+}

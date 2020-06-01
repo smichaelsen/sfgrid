@@ -1,0 +1,54 @@
+@import 'variables';
+
+@mixin sfgrid-respond-to($size, $direction: 'up') {
+  @if map_has_key($sfgrid-viewport-sizes, $size) {
+    $boundaries: map_get($sfgrid-viewport-sizes, $size);
+    @if ($direction == 'up') {
+      $lowerBoundary: nth($boundaries, 1);
+      @if ($lowerBoundary == 0) {
+        @content;
+      }
+      @else {
+        @media (min-width: $lowerBoundary) {
+          @content;
+        }
+      }
+    }
+    @else if ($direction == 'down') {
+      $upperBoundary: nth($boundaries, 2);
+      @if ($upperBoundary == 'unlimited') {
+        @content;
+      }
+      @else {
+        @media (max-width: $upperBoundary) {
+          @content;
+        }
+      }
+    }
+    @else if ($direction == 'only') {
+      $lowerBoundary: nth($boundaries, 1);
+      $upperBoundary: nth($boundaries, 2);
+      @if ($lowerBoundary == 0) {
+        @media (max-width: $upperBoundary) {
+          @content;
+        }
+      }
+      @else if ($upperBoundary == 'unlimited') {
+        @media (min-width: $lowerBoundary) {
+          @content;
+        }
+      }
+      @else {
+        @media (min-width: $lowerBoundary) and (max-width: $upperBoundary) {
+          @content;
+        }
+      }
+    }
+    @else {
+      @error "Invalid direction #{$direction}. Allowed values are \"up\", \"down\" and \"only\".";
+    }
+  }
+  @else {
+    @error "Invalid viewport size #{$size}.";
+  }
+}

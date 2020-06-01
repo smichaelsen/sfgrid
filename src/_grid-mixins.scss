@@ -1,0 +1,46 @@
+@import 'variables';
+@import 'functions';
+@import 'respond-to';
+
+@mixin container() {
+  max-width: #{$sfgrid-container-max-width}px;
+  @each $size, $gutter in $sfgrid-horizontal-gutters {
+    @include respond-to($size) {
+      margin: auto;
+      width: calc(100% - 2 * #{$gutter});
+    }
+  }
+}
+
+@mixin row() {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @each $gutter-size in map_keys($sfgrid-vertical-gutters) {
+    @include respond-to($gutter-size) {
+      $gutter: sfgrid-get-gutter($gutter-size, $sfgrid-vertical-gutters);
+      margin-bottom: -$gutter;
+    }
+  }
+}
+
+@mixin col($i) {
+  flex-basis: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  @each $gutter-size in map_keys($sfgrid-horizontal-gutters) {
+    @include respond-to($gutter-size) {
+      $gutter: sfgrid-get-gutter($gutter-size, $sfgrid-horizontal-gutters);
+      flex-basis: calc((100% - (#{$sfgrid-columns} - 1) * #{$gutter}) * #{($i / $sfgrid-columns)} + (#{$i} - 1) * #{$gutter});
+    }
+  }
+
+  @each $gutter-size in map_keys($sfgrid-vertical-gutters) {
+    @include respond-to($gutter-size) {
+      $gutter: sfgrid-get-gutter($gutter-size, $sfgrid-vertical-gutters);
+      margin-bottom: $gutter;
+    }
+  }
+}

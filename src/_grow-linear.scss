@@ -1,0 +1,29 @@
+@import 'functions';
+
+@mixin sfgrid-grow-linear($property, $sizeValues) {
+  @each $sizeValue in $sizeValues {
+    $i: index($sizeValues, $sizeValue);
+    @if $i == 1 {
+      $value: nth($sizeValue, 2);
+      #{$property}: #{$value}px;
+    } @else {
+      $previousSizeValue: nth($sizeValues, $i - 1);
+      $vMin: sfgrid-strip-unit(nth($previousSizeValue, 1));
+      $vMax: sfgrid-strip-unit(nth($sizeValue, 1));
+      $valMin: nth($previousSizeValue, 2);
+      $valMax: nth($sizeValue, 2);
+      @media (min-width: #{$vMin}px) and (max-width: #{$vMax - 1}px) {
+        /* from #{$valMin}px to #{$valMax}px */
+        #{$property}: sfgrid-linear($vMin, $vMax, $valMin, $valMax);
+      }
+      @if $i == length($sizeValues) {
+        $size: nth($sizeValue, 1);
+        $value: nth($sizeValue, 2);
+        $vMin: sfgrid-strip-unit($size);
+        @media (min-width: #{$vMin}px) {
+          #{$property}: #{$value}px;
+        }
+      }
+    }
+  }
+}

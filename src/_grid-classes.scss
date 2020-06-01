@@ -1,0 +1,54 @@
+@import 'functions';
+@import 'variables';
+
+@if $sfgrid-create-grid-classes {
+  // Container
+  .#{$sfgrid-grid-classes-prefix}container {
+    @include container();
+  }
+
+  // Grid Row
+  .#{$sfgrid-grid-classes-prefix}row {
+    @include row();
+  }
+
+  // Grid Columns
+  @each $size in map_keys($sfgrid-viewport-sizes) {
+    @for $i from 1 through $sfgrid-columns {
+      [class='#{$sfgrid-grid-classes-prefix}col-#{$size}-#{$i}'] {
+        @include col($i);
+      }
+    }
+  }
+
+  .sfgrid-showcase {
+    .#{$sfgrid-grid-classes-prefix}row {
+      padding-top: 25px;
+      border-top: 1px solid gray;
+      margin-top: 25px;
+      .#{$sfgrid-grid-classes-prefix}row {
+        padding-top: 0;
+        border-top: none;
+        margin-top: 0;
+      }
+    }
+    [class^='#{$sfgrid-grid-classes-prefix}col-'] {
+      background-color: coral;
+      text-align: center;
+      line-height: 1.8;
+
+      [class^='#{$sfgrid-grid-classes-prefix}col-'] {
+        background-color: aquamarine;
+      }
+    }
+
+    h1 {
+      $font-sizes: (
+        sfgrid-lower(xs) 20,
+        sfgrid-lower(lg) 30,
+        sfgrid-lower(xl) 35,
+      );
+      @include grow-linear('font-size', $font-sizes);
+    }
+  }
+}
