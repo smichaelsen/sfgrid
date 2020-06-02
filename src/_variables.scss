@@ -1,20 +1,19 @@
-$sfgrid-create-grid-classes: true;
-$sfgrid-grid-classes-prefix: 'sfgrid-';
+$sfgrid-create-grid-classes: true !default;
+$sfgrid-grid-classes-prefix: 'sfgrid-' !default;
 
-$sfgrid-columns: 12;
+$sfgrid-columns: 12 !default;
 $sfgrid-viewport-sizes: (
   xs: (0, 575px),
   sm: (576px, 767px),
   md: (768px, 991px),
   lg: (992px, 1199px),
   xl: (1200px, 'unlimited'),
-);
+) !default;
 
 $sfgrid-vertical-gutters: (
   xs: 15px,
   lg: 25px,
-);
+) !default;
+$sfgrid-horizontal-gutters: $sfgrid-vertical-gutters !default;
 
-$sfgrid-horizontal-gutters: $sfgrid-vertical-gutters;
-
-$sfgrid-container-max-width: 1280;
+$sfgrid-container-max-width: 1280 !default;
